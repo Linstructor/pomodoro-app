@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="assets/css/fa-regular.css">
+    <style>
+        @font-face {
+            font-family: "SF Display Light";
+            src: url("assets/fonts/SF-Pro-Display-Thin.otf") format("opentype");
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            background: transparent;
+        }
+
+        body {
+            background: white;
+            position: relative;
+        }
+
+        * {
+            font-family: "SF Display Light",serif;
+            user-select: none;
+            transition-duration: 870ms;
+            color: #707070;
+        }
+
+        #time {
+            text-align: center;
+            font-size: 5em;
+            width: auto;
+            margin: auto;
+        }
+
+        #indicator-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-bottom: 13px;
+        }
+
+        #indicator-container > div {
+            display: flex;
+            flex-direction: row;
+        }
+
+        #indicator-container > div > div {
+            box-sizing: border-box;
+        }
+
+        #indicator-container > div > .active {
+            background: rgba(112, 112, 112, 0.70);
+        }
+
+        #indicator-container > div > .rect{
+            border-bottom: 1px solid rgba(112, 112, 112, 0.30);
+            width: 45px;
+            height: 1px;
+            margin: auto;
+        }
+
+        #indicator-container > div > .circle {
+            border: 1px solid rgba(112, 112, 112, 0.30);
+            height: 11px;
+            width: 11px;
+            border-radius: 50px;
+            margin: 0 5px;
+        }
+
+        #indicator-container > div > .rect:last-child {
+            border-radius: 0 5px 5px 0;
+        }
+
+        #time > span {
+            display: inline-block;
+            width: 90px;
+        }
+
+        #settings {
+
+        }
+
+        input {
+            border: none;
+            outline: none;
+            width: 90px;
+            font-size: 1em;
+            background: inherit;
+            text-align: center;
+        }
+
+        input::selection {
+            background: transparent;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        #settings-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        #settings {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 90%;
+            height: 75%;
+            margin: 9% 5% 5%;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.26);
+            background: white;
+            animation-name: popUnder;
+            animation-duration: 570ms;
+            overflow: hidden;
+        }
+
+        #settings > div {
+            position: relative;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 75%;
+        }
+
+        #settings > div > #stg-close {
+            position: absolute;
+            top: 5px;
+            right: 7px;
+            cursor: pointer;
+        }
+
+        #settings > div > div {
+            display: flex;
+            font-size: 1em;
+            flex-direction: row;
+            justify-content: center;
+            margin-bottom: 5px;
+
+        }
+
+        #settings > div > div > input {
+            border: 1px solid #d2d2d2;
+            margin-left: 20px;
+            max-width: 50px;
+
+        }
+
+        #settings > div > div > label {
+            width: 130px;
+        }
+
+        @keyframes popUnder {
+            from {
+                top: +100%;
+            }
+            to {
+                top: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        #actions {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.27);
+            animation-duration: 400ms;
+            animation-name: fadeIn;
+            display: none;
+        }
+
+        #actions > div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+
+        #actions > div > div {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin: auto;
+            width: 95%;
+        }
+
+        #actions > div > div > div {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #actions > div > div > div > p {
+            color: white;
+            font-size: 1em;
+        }
+
+        #play {display: none;}
+        #main {cursor: pointer;}
+
+    </style>
+
+</head>
+<body>
+<div id="settings-button" class="far fa-cog"></div>
+
+<div id="main" style="display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%">
+    <p id="time"><input id="input" value="00" type="number" max="99">:<span id="secondes">00</span></p>
+</div>
+
+<div id="indicator-container">
+    <div>
+        <div class="rect"></div>
+        <div class="circle"></div>
+        <div class="rect"></div>
+        <div class="circle"></div>
+        <div class="rect"></div>
+        <div class="circle"></div>
+        <div class="rect"></div>
+    </div>
+</div>
+
+<div id="settings">
+    <div>
+        <div id="stg-close" class="far fa-times"></div>
+        <div><label>Pomodoro duration:</label><input id="stg-duration" type="number"></div>
+        <div><label>Always on top:</label><input id="stg-ontop" type="checkbox"></div>
+    </div>
+</div>
+
+<div id="actions">
+    <div>
+        <div>
+            <div id="restart"><p class="far fa-redo-alt"></p></div>
+            <div id="playback" data-action="pause">
+                <p id="pause" class="far fa-pause"></p>
+                <p id="play" class="far fa-play" style="margin-left: 5px"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  function initStorage() {
+    const set = (key, value) => window.localStorage.setItem(key, value);
+    set('duration', 25);
+    set('alwaysOnTop', true);
+    set('first', true);
+  }
+
+  const worker = new Worker('timer.js');
+  worker.postMessage({A: '1'});
+
+  function initSettingsPage() {
+    document.getElementById('stg-duration').value = window.localStorage.getItem('duration');
+    document.getElementById('stg-ontop').checked = window.localStorage.getItem('alwaysOnTop') === true;
+
+    document.getElementById('stg-duration').addEventListener('change', event => {
+      window.localStorage.setItem('duration', event.srcElement.value);
+      document.getElementById('input').value = event.srcElement.value;
+    });
+    document.getElementById('stg-ontop').addEventListener('change', event => {
+      window.localStorage.setItem('alwaysOnTop', event.srcElement.checked);
+      require('electron').ipcRenderer.send('settings-change', {alwaysOnTop: event.srcElement.checked})
+    });
+    document.getElementById('stg-close').addEventListener('click', () => {
+      document.getElementById('settings').style.display = 'none';
+    });
+  }
+
+  function initActions() {
+    document.getElementById('actions').addEventListener('click', event => {
+      let el;
+      if (event.srcElement.localName === 'div') el = event.srcElement;
+      if (event.srcElement.localName === 'p') el = event.srcElement.parentElement;
+
+      switch (el.id) {
+        case 'restart': {
+          document.getElementById('actions').style.display = ' none';
+          state.set('end');
+          require('electron').ipcRenderer.send('end');
+          resetCounter();
+          break;
+        }
+        case 'playback': {
+          console.log(el.getAttribute('data-action'));
+          require('electron').ipcRenderer.send('action', el.getAttribute('data-action'));
+          if (el.getAttribute('data-action') === 'pause') {
+            state.set('pause');
+            el.setAttribute('data-action', 'play');
+            document.getElementById('play').style.display = 'block';
+            document.getElementById('pause').style.display = 'none';
+          } else {
+            if (state.get() === 'pause') {
+              state.set('counting');
+              runTime(document.body.getAttribute('data-duration'), JSON.parse(document.body.getAttribute('data-save')));
+              document.body.removeAttribute('data-save');
+            }
+            el.setAttribute('data-action', 'pause');
+            document.getElementById('pause').style.display = 'block';
+            document.getElementById('play').style.display = 'none';
+          }
+
+          break;
+        }
+      }
+    })
+  }
+
+  function initView() {
+    document.getElementById('input').value = window.localStorage.getItem('duration');
+
+    initSettingsPage();
+    initActions();
+
+    document.getElementById('settings-button').addEventListener('click', () => {
+      showSettings();
+    });
+
+    document.getElementById('input').addEventListener('keypress', event => {
+      if (document.getElementById('input').value.toString().length === 2) event.preventDefault();
+    });
+
+    document.getElementById('input').addEventListener('mouseleave', event => {
+      event.srcElement.blur();
+    });
+
+    document.body.addEventListener('click', event => {
+      if (event.srcElement.id !== 'main' || state.get() === 'counting') return;
+      prepareCounter();
+      runTime(document.getElementById('input').value);
+    });
+
+    document.addEventListener('mouseover', event => {
+      if (state.get() === 'waiting') return;
+      document.getElementById('actions').style.display = 'block';
+    });
+
+    document.addEventListener('mouseleave', event => {
+      if (state.get() === 'waiting') return;
+      document.getElementById('actions').style.display = ' none';
+    })
+  }
+
+  function to2Digit(number) {
+    if (number < 10 && number.toString().length != 2) return '0'+number;
+    return number;
+  }
+
+  function setNumber(minutes, secondes) {
+    document.getElementById('input').value = to2Digit(minutes);
+    document.getElementById('secondes').innerText = to2Digit(secondes);
+  }
+
+  function prepareCounter() {
+    state.set('counting');
+    document.getElementById('input').readOnly = true;
+    document.getElementById('input').style.cursor = 'default';
+    require('electron').ipcRenderer.send('start');
+    document.body.style.backgroundColor = 'transparent';
+    document.getElementById('indicator-container').style.display = 'none';
+    document.getElementById('settings-button').style.display = 'none';
+    document.body.setAttribute('data-duration', document.getElementById('input').value);
+  }
+
+  function resetCounter() {
+    setNumber(document.body.getAttribute('data-duration'), '00');
+    state.set('waiting');
+    document.body.style.backgroundColor = 'white';
+    document.getElementById('indicator-container').style.display = 'flex';
+    document.getElementById('input').readOnly = false;
+    document.getElementById('input').style.cursor = 'text';
+    document.getElementById('settings-button').style.display = 'block';
+    state.set('waiting');
+  }
+
+  function runTime(minutes, currentState = undefined) {
+    let nextState = undefined;
+    if (document.body.getAttribute('data-state') === 'pause') return document.body.setAttribute('data-save', JSON.stringify(currentState));
+    if (document.body.getAttribute('data-state') !== 'counting') return;
+    if (currentState !== undefined) {
+      setNumber(currentState.minutes, currentState.secondes);
+      if (currentState.secondes === 0 && currentState.minutes === 0) {
+        require('electron').ipcRenderer.send('end');
+        resetCounter();
+        currentStep.add();
+        return;
+      }
+      nextState = Object.create(currentState);
+      nextState.minutes = currentState.minutes;
+      if (currentState.secondes === 0) {
+        nextState.minutes = currentState.minutes - 1;
+        nextState.secondes = 59;
+      } else {
+        nextState.secondes = currentState.secondes -1;
+      }
+    } else {
+      nextState = {
+        minutes: minutes,
+        secondes: 0
+      };
+    }
+    setTimeout(() => runTime(minutes, nextState), 1000);
+    // console.log('count');
+  }
+
+  const currentStep = {
+    set: (number) => {
+      if (number > 3) return;
+      document.body.setAttribute('data-step', number);
+      for (let i = 0; i < number; i++) {
+        document.getElementsByClassName('circle')[i].classList.add('active');
+      }
+    },
+    get: () => document.body.getAttribute('data-step'),
+    reset: () => this.set(0),
+    add: () => this.set(this.get()+1),
+  };
+
+  const state = {
+    set: newState => document.body.setAttribute('data-state', newState),
+    get: () => document.body.getAttribute('data-state')
+  };
+
+  function showSettings() {
+    document.getElementById('settings').style.display = 'block';
+  }
+
+  if (window.localStorage.length === 0) initStorage();
+
+  initView();
+  state.set('waiting');
+
+</script>
+
+</body>
+</html>
