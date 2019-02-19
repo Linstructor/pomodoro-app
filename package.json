@@ -5,11 +5,34 @@
   "main": "index.js",
   "scripts": {
     "start": "./node_modules/.bin/electron ./app/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev-front": "./node_modules/.bin/parcel ./public/index.html -d ./public/final -o index.html"
   },
   "author": "Tristan Morisot",
   "license": "ISC",
   "dependencies": {
-    "electron": "^4.0.0"
+    "babel-polyfill": "^6.26.0",
+    "electron": "^4.0.0",
+    "vue": "^2.6.6",
+    "vue-hot-reload-api": "^2.3.2",
+    "vuex": "^3.1.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.2",
+    "@vue/component-compiler-utils": "^2.5.2",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "parcel-bundler": "^1.11.0",
+    "vue-template-compiler": "^2.6.6"
+  },
+  "source": {
+    "plugins": [
+      [
+        "transform-runtime",
+        {
+          "polyfill": false,
+          "regenerator": true
+        }
+      ]
+    ]
   }
 }

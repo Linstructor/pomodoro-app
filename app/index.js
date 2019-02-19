@@ -16,16 +16,15 @@ app.on('ready', () => {
     titleBarStyle: 'hidden',
     alwaysOnTop: true,
     maximizable: false,
-    resizable: false,
+    // resizable: false,
     fullscreenable: false,
     fullscreenWindowTitle: true,
-    // focusable: false,
   });
 
   window.setVisibleOnAllWorkspaces(true, {visibleOnFullScreen: true});
   console.log(window.isVisibleOnAllWorkspaces());
 
-  window.loadFile(path.resolve(__dirname, '../public/index.html'));
+  window.loadFile(path.resolve(__dirname, '../public/final/index.html'));
 
   window.webContents.executeJavaScript('window.localStorage.getItem(\'alwaysOnTop\')')
     .then(result => {

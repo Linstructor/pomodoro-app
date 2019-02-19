@@ -1,0 +1,232 @@
+@font-face {
+    font-family: "SF Display Light";
+    src: url("assets/fonts/SF-Pro-Display-Thin.otf") format("opentype");
+}
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background: transparent;
+}
+
+body {
+    background: white;
+    position: relative;
+}
+
+* {
+    font-family: "SF Display Light",serif;
+    user-select: none;
+    transition-duration: 870ms;
+    color: #707070;
+}
+
+#time {
+    cursor: initial;
+    text-align: center;
+    font-size: 5em;
+    width: auto;
+    margin: auto;
+    background: white;
+    z-index: 10;
+}
+
+#indicator-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 13px;
+}
+
+#indicator-container > div {
+    display: flex;
+    flex-direction: row;
+}
+
+#indicator-container > div > div {
+    box-sizing: border-box;
+}
+
+#indicator-container > div > .active {
+    background: rgba(112, 112, 112, 0.70);
+}
+
+#indicator-container > div > .rect{
+    border-bottom: 1px solid rgba(112, 112, 112, 0.30);
+    width: 45px;
+    height: 1px;
+    margin: auto;
+}
+
+#indicator-container > div > .circle {
+    border: 1px solid rgba(112, 112, 112, 0.30);
+    height: 11px;
+    width: 11px;
+    border-radius: 50px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+#indicator-container > div > .rect:last-child {
+    border-radius: 0 5px 5px 0;
+}
+
+#time > span {
+    display: inline-block;
+    width: 90px;
+}
+
+input {
+    border: none;
+    outline: none;
+    width: 91px;
+    font-size: 1em;
+    background: inherit;
+    text-align: center;
+}
+
+input::selection {
+    background: transparent;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#settings-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    transition-duration: .2s;
+}
+
+#settings-button:hover {
+    font-size: 1.2em;
+}
+
+#settings {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    animation-name: popUnder;
+    animation-duration: 570ms;
+    overflow: hidden;
+}
+
+#settings-content {
+    margin: 5%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.26);
+    background: white;
+    z-index: 100;
+    overflow: hidden;
+}
+
+#settings > div {
+    position: relative;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 75%;
+}
+
+#settings > div > #stg-close {
+    position: absolute;
+    top: 5px;
+    right: 7px;
+    cursor: pointer;
+}
+
+#settings > div > div {
+    display: flex;
+    font-size: 1em;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 5px;
+
+}
+
+#settings > div > div > input {
+    border: 1px solid #d2d2d2;
+    margin-left: 20px;
+    max-width: 50px;
+
+}
+
+#settings > div > div > label {
+    width: 130px;
+}
+
+@keyframes popUnder {
+    from {
+        top: +100%;
+    }
+    to {
+        top: 0;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+#actions {
+    position: absolute;
+    z-index: 11;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#actions > div {
+    background: radial-gradient(circle at center, transparent 0, rgba(0, 0, 0, 0.69) 100%);
+    animation-duration: 400ms;
+    animation-name: fadeIn;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+#actions > div > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: auto;
+    width: 95%;
+}
+
+#actions > div > div > div {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#actions > div > div > div > p {
+    color: white;
+    font-size: 1em;
+}
+
+#play {display: none;}
+#main {cursor: pointer;}
