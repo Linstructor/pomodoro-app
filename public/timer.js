@@ -1,39 +1,51 @@
-const status = {
-  RUN: 'r',
-  PAUSE: 'p',
-  WAIT: 'w',
+import "babel-polyfill";
+
+let mustStop = false;
+let generator;
+let lastVal;
+
+async function* run(end) {
+  const wait = () => new Promise(resolve => setTimeout(resolve, 1000));
+  while (!mustStop && new Date().getTime() <= end.getTime()) {
+    await wait();
+    yield new Date().getTime();
+  }
+}
+
+
+const show = async (callback, callBackEnd) => {
+  const res = await generator.next();
+  if (mustStop) return;
+  if (!res.done) {
+    callback(res.value, lastVal);
+    lastVal = res.value;
+    return show(callback, callBackEnd);
+  }
+  return callBackEnd();
 };
 
-const actions = {
-  CHANGE: 'change',
-  RESET: 'reset'
+
+
+const start = (end, callback, callbackEnd) => {
+  mustStop = false;
+  const date = new Date();
+  lastVal = date.getTime();
+  date.setMinutes(date.getMinutes() + end.minutes);
+  if (end.seconds) date.setSeconds(date.getSeconds() + end.seconds);
+  // console.log(new Date(), date, end);
+  generator = run(date);
+  show(callback, callbackEnd);
 };
 
-const targets = {
-  STATUS: 'status'
+const stop = () => {
+  mustStop = true;
+  console.log('Stop timer', mustStop);
+  const temp = lastVal;
+  lastVal = undefined;
+  return temp;
 };
 
-let currentSate = status.WAIT;
-
-onmessage = (event) => {
-  if (event.data.action === actions.RESET) return reset();
-
-  if (event.data.action === actions.CHANGE) {
-    if (event.data.target === targets.STATUS) {
-      if (event.data.value === status.PAUSE) return pause();
-      if (event.data.value === status.RUN) return run();
-    }
-  } 
-};
-
-const pause = () => {
-  currentSate = status.PAUSE;
-};
-
-const run = () => {
-  currentSate = status.RUN;
-};
-
-const reset = () => {
-  currentSate = status.WAIT;
+module.exports = {
+  start,
+  stop
 };
