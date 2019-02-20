@@ -1,19 +1,18 @@
 {
-  "name": "todo-pomodoro",
+  "name": "pomodoro",
   "version": "1.0.0",
-  "description": "Mac pomodoro with todo list",
+  "description": "Mac pomodoro",
   "main": "index.js",
   "scripts": {
     "start": "./node_modules/.bin/electron ./app/index.js",
-    "dev-front": "./node_modules/.bin/parcel ./public/index.html -d ./public/final -o index.html"
+    "dev-front": "./node_modules/.bin/parcel ./public/index.html -d ./public/final -o index.html",
+    "build-front": "./node_modules/.bin/parcel build ./public/index.html -d ./public/final -o index.html --target=electron --public-url '.'"
   },
   "author": "Tristan Morisot",
   "license": "ISC",
   "dependencies": {
-    "babel-polyfill": "^6.26.0",
     "electron": "^4.0.0",
     "vue": "^2.6.6",
-    "vue-hot-reload-api": "^2.3.2",
     "vuex": "^3.1.0"
   },
   "devDependencies": {
@@ -21,7 +20,9 @@
     "@vue/component-compiler-utils": "^2.5.2",
     "babel-core": "^6.26.3",
     "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
     "parcel-bundler": "^1.11.0",
+    "vue-hot-reload-api": "^2.3.2",
     "vue-template-compiler": "^2.6.6"
   },
   "source": {

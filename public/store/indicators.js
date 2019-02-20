@@ -12,7 +12,7 @@ module.exports = {
   },
   actions: {
     add({ commit, state}) {
-      commit('SET', state.current++);
+      commit('SET', state.current+1);
     },
     reset({ commit }) {
       commit('SET', 1);

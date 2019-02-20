@@ -10,8 +10,8 @@ module.exports = {
   },
 
   getters: {
-    minutes: state => {return state.minutes < 10 ? `0${state.minutes}` : state.minutes},
-    seconds: state => {return state.seconds < 10 ? `0${state.seconds}` : state.seconds},
+    getMinutes: state => {return state.minutes < 10 ? `0${state.minutes}` : state.minutes},
+    getSeconds: state => {return state.seconds < 10 ? `0${state.seconds}` : state.seconds},
   },
 
   mutations: {
@@ -20,16 +20,18 @@ module.exports = {
       state.original = payload;
     },
     CHANGE_SECONDS(state, payload){
-      if (payload < 0) {
+      const newValue = state.seconds - payload;
+      if (newValue < 0) {
         if (state.minutes === 0) {
           state.ended = true;
           state.running = false;
         } else {
           state.minutes--;
           state.seconds = 59;
+
         }
       } else {
-        state.seconds = payload;
+        state.seconds = newValue;
       }
     },
     CHANGE_STATE(state, payload){
@@ -45,6 +47,8 @@ module.exports = {
           state.paused = false;
           state.running = false;
           state.minutes = state.original;
+          state.seconds = 0;
+          require('electron').ipcRenderer.send('end');
           return;
         }
         case 'pause': {
@@ -62,8 +66,8 @@ module.exports = {
     changeMinutes({commit, state}, data) {
       commit('CHANGE_MINUTES', parseInt(data));
     },
-    decount({commit, state}) {
-      commit('CHANGE_SECONDS', state.seconds--);
+    decount({commit, state}, data = 1) {
+      commit('CHANGE_SECONDS', data);
     },
     changeState({commit, state}, data) {
       commit('CHANGE_STATE', data);

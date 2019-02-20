@@ -17,6 +17,7 @@ module.exports = {
     },
     CHANGE_ALWAYS_TOP(state, payload){
       window.localStorage.setItem('alwaysOnTop', payload);
+      require('electron').ipcRenderer.send('settings-change', {alwaysOnTop: payload});
       state.alwaysOnTop = payload;
     },
   },

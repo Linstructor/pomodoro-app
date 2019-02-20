@@ -50,7 +50,8 @@
       resume() {
         console.log(this.minutes, this.seconds);
         this.changeState('start');
-        timer.start({minutes: this.minutes, seconds: this.seconds}, this.callback, this.stopCallback)
+        console.log(this.minutes, this.seconds);
+        timer.start({minutes: parseInt(this.minutes), seconds: this.seconds}, this.callback, this.stopCallback)
       }
     }
   }

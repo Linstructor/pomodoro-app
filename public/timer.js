@@ -17,7 +17,7 @@ const show = async (callback, callBackEnd) => {
   const res = await generator.next();
   if (mustStop) return;
   if (!res.done) {
-    callback(res.value);
+    callback(res.value, lastVal);
     lastVal = res.value;
     return show(callback, callBackEnd);
   }
@@ -29,9 +29,10 @@ const show = async (callback, callBackEnd) => {
 const start = (end, callback, callbackEnd) => {
   mustStop = false;
   const date = new Date();
+  lastVal = date.getTime();
   date.setMinutes(date.getMinutes() + end.minutes);
   if (end.seconds) date.setSeconds(date.getSeconds() + end.seconds);
-  console.log(new Date(), date);
+  // console.log(new Date(), date, end);
   generator = run(date);
   show(callback, callbackEnd);
 };
