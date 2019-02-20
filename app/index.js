@@ -10,19 +10,19 @@ app.on('ready', () => {
     transparent: true,
     vibrancy: 'appearance-based',
     x: xPos - 50 - 300,
-    y: 50,
+    y: 65,
     title: 'test',
-    frame: false,
+    // frame: false,
     titleBarStyle: 'hidden',
     alwaysOnTop: true,
     maximizable: false,
     // resizable: false,
     fullscreenable: false,
-    fullscreenWindowTitle: true,
+    // fullscreenWindowTitle: true,
+    movable: true
   });
 
   window.setVisibleOnAllWorkspaces(true, {visibleOnFullScreen: true});
-  console.log(window.isVisibleOnAllWorkspaces());
 
   window.loadFile(path.resolve(__dirname, '../public/final/index.html'));
 
@@ -39,16 +39,15 @@ app.on('ready', () => {
     window.setFocusable(false);
   });
 
-  ipcMain.on('end', () => {
+  ipcMain.on('end', (event, end = false, params = {}) => {
     window.setSize(300, 202, true);
     window.setWindowButtonVisibility(true);
     window.setFocusable(true);
-    if (!window.isVisible()) {
-      let myNotification = new Notification({
-        title: '',
-        body: 'Pomodoro phase X done, 5 minutes of free time'
-      });
-      myNotification.show();
+    if (end) {
+      new Notification({
+        title: `Take a ${params.max === params.current ? 'long':'short'} break`,
+        body: `Pomodoro phase ${params.current} done, ${params.max === params.current ? '25':'5'} minutes of free time`
+      }).show();
     }
     window.focus();
   });

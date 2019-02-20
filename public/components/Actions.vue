@@ -2,14 +2,12 @@
   <div id="actions" @mouseenter="changeShowState(true)" @mouseleave="changeShowState(false)">
     <div v-if="show">
       <div>
-        <div id="restart" @click="reset"><p class="far fa-redo-alt"></p></div>
+        <div id="restart" @click="reset"><p class="material-icons">restore</p></div>
         <div v-if="!this.paused" @click="pause">
-          <!--<p id="pause" class="far fa-pause"></p>-->
-          <p>Pause</p>
+          <p id="pause" class="material-icons">pause</p>
         </div>
         <div id="playback" v-if="this.paused" @click="resume">
-          <!--<p id="play" class="far fa-play" style="margin-left: 5px"></p>-->
-          <p>Play</p>
+          <p class="material-icons">play_arrow</p>
         </div>
       </div>
     </div>
@@ -50,7 +48,6 @@
       resume() {
         console.log(this.minutes, this.seconds);
         this.changeState('start');
-        console.log(this.minutes, this.seconds);
         timer.start({minutes: parseInt(this.minutes), seconds: this.seconds}, this.callback, this.stopCallback)
       }
     }

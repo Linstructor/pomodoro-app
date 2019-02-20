@@ -1,7 +1,7 @@
 <template>
   <div id="settings">
     <div id="settings-content">
-      <div id="stg-close" class="far fa-times" @click="hideSettings"></div>
+      <div id="stg-close" class="material-icons" @click="hideSettings">close</div>
       <div><label>Pomodoro duration:</label><input id="stg-duration" type="number" v-bind:value="duration" v-on:input="setDuration($event.target.value)" v-on:change="changeMinutes($event.target.value)"></div>
       <div><label>Always on top:</label><input id="stg-ontop" type="checkbox" :checked="alwaysOnTop" @input="setAlwaysOntop(!alwaysOnTop)"></div>
     </div>
