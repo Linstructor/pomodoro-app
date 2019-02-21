@@ -5,7 +5,7 @@
     <Settings v-if="isSettingsPageShow"></Settings>
     <div id="main" style="display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%;" @click="start">
       <p id="time">
-        <input id="input" :value="getMinutes" type="number" @input="changeMinutes($event.target.value)">:<span id="secondes">{{getSeconds}}</span>
+        <input id="input" :value="getMinutes" type="number" @input="changeMinutes($event.target.value)"><span style="width: 25px;">:</span><span id="secondes">{{getSeconds}}</span>
       </p>
     </div>
     <Indicators v-if="!this.running"></Indicators>

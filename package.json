@@ -4,9 +4,10 @@
   "description": "Mac pomodoro",
   "main": "index.js",
   "scripts": {
-    "start": "rm -r -f ./public/final && ./node_modules/.bin/parcel build ./public/index.html -d ./public/final -o index.html --target=electron --public-url '.' && ./node_modules/.bin/electron ./app/index.js",
-    "dev-front": "./node_modules/.bin/parcel serve ./public/index.html -d ./public/final -o index.html --target=electron",
-    "build-front": "./node_modules/.bin/parcel build ./public/index.html -d ./public/final -o index.html --target=electron --public-url '.'"
+    "start": "rm -r -f ./public/final && ./node_modules/.bin/parcel build ./public/index.html -d ./public/final -o index.html --target=electron --public-url '.' && ./node_modules/.bin/electron ./app.js",
+    "dev-front": "./node_modules/.bin/parcel ./public/index.html -d ./public/final -o index.html --target=electron",
+    "build-front": "./node_modules/.bin/parcel build ./public/index.html -d ./public/final -o index.html --target=electron --public-url '.'",
+    "build-app": "rm -rf ./dist/* && rm ./final/.gitignore && cp .gitignore ./final/ && electron-packager ./app.js Pomodoro --platform=darwin --icon './public/assets/img/icon_osx.icns' --out ./dist --overwrite --asar"
   },
   "author": "Tristan Morisot",
   "license": "ISC",
@@ -21,6 +22,8 @@
     "babel-core": "^6.26.3",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.26.0",
+    "electron-installer-dmg": "^2.0.0",
+    "electron-packager": "^13.1.0",
     "parcel-bundler": "^1.11.0",
     "vue-hot-reload-api": "^2.3.2",
     "vue-template-compiler": "^2.6.6"
