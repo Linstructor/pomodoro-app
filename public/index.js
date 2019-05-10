@@ -4,6 +4,12 @@ import App from './components/App'
 import Vuex from 'vuex';
 import modules from './store/index';
 
+import {ipcRenderer} from 'electron';
+
+console.log = (...msg) => ipcRenderer.send('log', {type: 'log', message: msg});
+console.warn = (...msg) => ipcRenderer.send('log', {type: 'warn', message: msg});
+console.error = (...msg) => ipcRenderer.send('log', {type: 'error', message: msg});
+
 Vue.use(Vuex);
 
 if (window.localStorage && window.localStorage.length === 0) {

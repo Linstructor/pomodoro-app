@@ -70,6 +70,15 @@ app.on('ready', () => {
     }
   });
 
+  ipcMain.on('log', (event, data) => {
+    console.log('\x1b[34m');
+    switch (data.type) {
+      case 'log': console.log.apply(null, data.message); break;
+      case 'error': console.warn.apply(null, data.message); break;
+      case 'warn': console.error.apply(null, data.message); break;
+    }
+  });
+
   app.on('window-all-closed', () => {
     app.quit();
   })
