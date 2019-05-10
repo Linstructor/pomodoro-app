@@ -34,10 +34,10 @@ module.exports = {
     },
   },
   actions: {
-    setDuration({ commit, state}, data) {
-      commit('CHANGE_DURATION', parseInt(data));
+    setDuration({commit, state}, data) {
+      commit('CHANGE_DURATION', parseInt(data) ? parseInt(data): 1);
     },
-    setAlwaysOntop({ commit, state}, data) {
+    setAlwaysOntop({commit, state}, data) {
       commit('CHANGE_ALWAYS_TOP', data);
     },
     changeDarkModeState({commit, state}, data) {
