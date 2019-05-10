@@ -284,3 +284,7 @@ input::-webkit-inner-spin-button {
 #ripple:hover {
     background: radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
 }
+
+.dark-mode {
+    background: #2D2D2D !important;
+}

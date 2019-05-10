@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; height: 100%; overflow: hidden;">
+  <div style="width: 100%; height: 100%; overflow: hidden;" :class="[darkMode ? 'dark-mode': '']">
     <div id="drag"></div>
     <div id="settings-button" class="material-icons" @click="showSettings" v-if="!this.running">settings</div>
     <Settings v-if="isSettingsPageShow"></Settings>
@@ -38,7 +38,8 @@
       ]),
       ...mapState('app', ['isSettingsPageShow']),
       ...mapState('timer', ['running', "minutes"]),
-      ...mapState('indicators', ['current', 'total'])
+      ...mapState('indicators', ['current', 'total']),
+      ...mapState('settings', ['darkMode'])
     },
     methods: {
       ...mapActions('timer', [

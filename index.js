@@ -1,5 +1,5 @@
 const electron = require('electron');
-const { app, BrowserWindow, ipcMain, Notification } = electron;
+const { app, BrowserWindow, ipcMain, Notification, systemPreferences } = electron;
 const path = require('path');
 
 app.on('ready', () => {
@@ -38,6 +38,13 @@ app.on('ready', () => {
       window.setAlwaysOnTop(result === 'true');
     })
     .catch(err => console.error(err));
+
+  systemPreferences.subscribeNotification(
+    'AppleInterfaceThemeChangedNotification',
+    function theThemeHasChanged () {
+      window.webContents.send('darkmode', systemPreferences.isDarkMode())
+    }
+  );
 
 
   ipcMain.on('start', () => {
