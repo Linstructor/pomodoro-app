@@ -71,11 +71,22 @@ app.on('ready', () => {
   });
 
   ipcMain.on('log', (event, data) => {
-    console.log('\x1b[34m');
     switch (data.type) {
-      case 'log': console.log.apply(null, data.message); break;
-      case 'error': console.warn.apply(null, data.message); break;
-      case 'warn': console.error.apply(null, data.message); break;
+      case 'log': {
+        data.message.unshift('\x1b[34m');
+        console.log.apply(null, data.message);
+        break;
+      }
+      case 'error': {
+        data.message.unshift('\x1b[35m');
+        console.warn.apply(null, data.message);
+        break;
+      }
+      case 'warn': {
+        data.message.unshift('\x1b[33m');
+        console.error.apply(null, data.message);
+        break;
+      }
     }
   });
 
