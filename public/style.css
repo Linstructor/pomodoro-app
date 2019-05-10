@@ -204,7 +204,7 @@ input::-webkit-inner-spin-button {
 }
 
 #actions > div {
-    background: radial-gradient(circle at center, transparent 0, rgba(0, 0, 0, 0.41) 100%);
+    background: radial-gradient(circle at center, transparent 0, rgba(105, 105, 105, 0.41) 100%);
     animation-duration: 400ms;
     animation-name: fadeIn;
     display: flex;
