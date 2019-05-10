@@ -3,7 +3,7 @@
     <div id="drag"></div>
     <div id="settings-button" class="material-icons" @click="showSettings" v-if="!this.running">settings</div>
     <Settings v-if="isSettingsPageShow"></Settings>
-    <div id="main" style="display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%;" @click="start">
+    <div id="main" style="display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%;" @mousedown="click" @mouseup="start">
       <p id="time">
         <input id="input" :value="getMinutes" type="number" @input="changeMinutes($event.target.value)"><span style="width: 25px;">:</span><span id="secondes">{{getSeconds}}</span>
       </p>
@@ -23,6 +23,14 @@
   export default {
     name: "App",
     components: {Actions, Settings, Indicators},
+    data: function() {
+      return {
+        clickPos: {
+          x: 0,
+          y: 0
+        }
+      }
+    },
     computed: {
       ...mapGetters('timer', [
         'getMinutes',
@@ -45,8 +53,13 @@
         'add',
         'reset',
       ]),
+      click(event) {
+        this.clickPos.x = event.screenX;
+        this.clickPos.y = event.screenY;
+      },
       start(event) {
-        if (event.srcElement.id !== 'main') return;
+        if (event.target.id !== 'main') return;
+        if (this.clickPos.x !== event.screenX || this.clickPos.y !== event.screenY) return;
         if (this.current === this.total) this.reset();
         console.log('start');
         this.changeState('start');
