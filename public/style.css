@@ -150,6 +150,21 @@ input::-webkit-inner-spin-button {
     overflow: hidden;
 }
 
+.setting-title {
+    margin-top: auto;
+    margin-bottom: auto;
+    font-weight: 600;
+    text-align: left;
+    width: 130px;
+}
+
+.setting-input {
+    margin-bottom: auto;
+    margin-top: auto;
+    height: 30px;
+}
+
+
 #settings > div {
     position: relative;
     padding: 30px;
