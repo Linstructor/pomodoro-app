@@ -4,8 +4,8 @@
   "description": "Mac pomodoro",
   "main": "index.js",
   "scripts": {
-    "start-build": "rm -r -f ./public/final && ./node_modules/.bin/parcel build ./public/index.html -d ./public/final -o index.html --target=electron --public-url '.' && ./node_modules/.bin/electron ./index.js",
-    "start-elec": "./node_modules/.bin/electron ./index.js",
+    "start": "rm -r -f ./public/final && ./node_modules/.bin/parcel build ./public/index.html -d ./public/final -o index.html --target=electron --public-url '.' && ./node_modules/.bin/electron ./index.js dev",
+    "start-elec": "./node_modules/.bin/electron ./index.js dev",
     "dev-front": "./node_modules/.bin/parcel ./public/index.html -d ./public/final -o index.html --target=electron",
     "build-front": "./node_modules/.bin/parcel build ./public/index.html -d ./public/final -o index.html --target=electron --public-url '.'",
     "build-app": "rm -rf ./dist/* && npm run build-front && electron-packager . Pomodoro --platform=darwin --icon './public/assets/img/icon_osx.icns' --out ./dist --overwrite"

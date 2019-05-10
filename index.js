@@ -12,13 +12,13 @@ app.on('ready', () => {
     x: xPos - 50 - 300,
     y: 65,
     title: 'test',
-    // frame: false,
+    frame: false,
     titleBarStyle: 'hidden',
     alwaysOnTop: true,
     maximizable: false,
-    // resizable: false,
+    resizable: process.argv.includes('dev'),
     fullscreenable: false,
-    // fullscreenWindowTitle: true,
+    fullscreenWindowTitle: true,
     movable: true,
     icon: './public/assets/img/icon.png'
   });
