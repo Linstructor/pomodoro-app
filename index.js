@@ -3,6 +3,12 @@ const { app, BrowserWindow, ipcMain, Notification } = electron;
 const path = require('path');
 
 app.on('ready', () => {
+
+  if (process.argv.includes('dev')) {
+    require('vue-devtools').install();
+    require('devtron').install();
+  }
+
   const xPos = electron.screen.getPrimaryDisplay().workArea.width;
   let window = new BrowserWindow({
     width: 300,
