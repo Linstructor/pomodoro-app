@@ -5,7 +5,7 @@
     <Settings v-if="isSettingsPageShow"></Settings>
     <div id="main" style="display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%;" @mousedown="click" @mouseup="start">
       <p id="time">
-        <input id="input" :value="getMinutes" type="number" @input="changeMinutes($event.target.value)"><span style="width: 25px;">:</span><span id="secondes">{{getSeconds}}</span>
+        <input id="input" :value="getMinutes" type="number" @input="updateMinute"><span id="time-separator" style="width: 25px;">:</span><span id="secondes">{{getSeconds}}</span>
       </p>
     </div>
     <Indicators v-if="!this.running"></Indicators>
@@ -53,6 +53,13 @@
         'add',
         'reset',
       ]),
+      updateMinute(event) {
+        if (event.target.valueAsNumber > 100) {
+          event.target.value = 99;
+          return this.changeMinutes(99);
+        }
+        this.changeMinutes(event.target.value);
+      },
       click(event) {
         this.clickPos.x = event.screenX;
         this.clickPos.y = event.screenY;
