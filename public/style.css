@@ -185,7 +185,7 @@ input::-webkit-inner-spin-button {
     display: flex;
     font-size: 1em;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     margin-bottom: 5px;
 
 }
@@ -199,6 +199,11 @@ input::-webkit-inner-spin-button {
 
 #settings > div > div > label {
     width: 130px;
+}
+
+#stg-duration {
+    height: 17px;
+    width: 40px;
 }
 
 @keyframes popUnder {
