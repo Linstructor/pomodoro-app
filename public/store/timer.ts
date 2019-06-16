@@ -1,8 +1,11 @@
-module.exports = {
+import { Module } from "vuex";
+import { StoreAction, TimerState } from "../models/store";
+
+const module:  Module<TimerState, any> = {
   namespaced: true,
   state: {
-    original: parseInt(window.localStorage.getItem('duration')),
-    minutes: parseInt(window.localStorage.getItem('duration')),
+    original: parseInt(window.localStorage.getItem('duration') || '0'),
+    minutes: parseInt(window.localStorage.getItem('duration') || '0'),
     seconds: 0,
     ended: false,
     paused: false,
@@ -10,16 +13,16 @@ module.exports = {
   },
 
   getters: {
-    getMinutes: state => {return state.minutes < 10 ? `0${state.minutes}` : state.minutes},
-    getSeconds: state => {return state.seconds < 10 ? `0${state.seconds}` : state.seconds},
+    getMinutes: (state: TimerState) => {return state.minutes < 10 ? `0${state.minutes}` : state.minutes},
+    getSeconds: (state: TimerState) => {return state.seconds < 10 ? `0${state.seconds}` : state.seconds},
   },
 
   mutations: {
-    CHANGE_MINUTES(state, payload){
+    CHANGE_MINUTES(state: TimerState, payload: number){
       state.minutes = payload;
       state.original = payload;
     },
-    CHANGE_SECONDS(state, payload){
+    CHANGE_SECONDS(state: TimerState, payload: number){
       const newValue = state.seconds - payload;
       if (newValue < 0) {
         if (state.minutes === 0) {
@@ -34,15 +37,15 @@ module.exports = {
         state.seconds = newValue;
       }
     },
-    CHANGE_STATE(state, payload){
+    CHANGE_STATE(state: TimerState, payload: TimerStatus){
       switch (payload) {
-        case 'start': {
+        case TimerStatus.start: {
           state.ended = false;
           state.paused = false;
           state.running = true;
           return;
         }
-        case 'stop': {
+        case TimerStatus.stop: {
           state.ended = true;
           state.paused = false;
           state.running = false;
@@ -51,26 +54,34 @@ module.exports = {
           require('electron').ipcRenderer.send('end');
           return;
         }
-        case 'pause': {
+        case TimerStatus.pause: {
           state.ended = false;
           state.paused = true;
           state.running = true;
           return;
         }
       }
-      state.minutes = payload;
+      state.minutes = parseInt(payload);
     },
   },
 
   actions: {
-    changeMinutes({commit, state}, data) {
-      commit('CHANGE_MINUTES', parseInt(data));
+    changeMinutes({commit, state}: StoreAction<TimerState>, data: number) {
+      commit('CHANGE_MINUTES', data);
     },
-    decount({commit, state}, data = 1) {
+    decount({commit, state}: StoreAction<TimerState>, data = 1) {
       commit('CHANGE_SECONDS', data);
     },
-    changeState({commit, state}, data) {
+    changeState({commit, state}: StoreAction<TimerState>, data: TimerStatus) {
       commit('CHANGE_STATE', data);
     }
   }
 };
+
+export enum TimerStatus {
+  start,
+  stop,
+  pause
+}
+
+export default module;

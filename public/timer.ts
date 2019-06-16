@@ -1,10 +1,10 @@
 import "babel-polyfill";
 
 let mustStop = false;
-let generator;
-let lastVal;
+let generator: any;
+let lastVal: number;
 
-async function* run(end) {
+async function* run(end: Date) {
   const wait = () => new Promise(resolve => setTimeout(resolve, 1000));
   while (!mustStop && new Date().getTime() <= end.getTime()) {
     await wait();
@@ -13,7 +13,7 @@ async function* run(end) {
 }
 
 
-const show = async (callback, callBackEnd) => {
+const show = async (callback: Callback, callBackEnd: CallBackEnd): Promise<void> => {
   const res = await generator.next();
   if (mustStop) return;
   if (!res.done) {
@@ -26,7 +26,7 @@ const show = async (callback, callBackEnd) => {
 
 
 
-const start = (end, callback, callbackEnd) => {
+export const start = (end: EndDate, callback: Callback, callbackEnd: CallBackEnd) => {
   mustStop = false;
   const date = new Date();
   lastVal = date.getTime();
@@ -37,15 +37,23 @@ const start = (end, callback, callbackEnd) => {
   show(callback, callbackEnd);
 };
 
-const stop = () => {
+export const stop = () => {
   mustStop = true;
   console.log('Stop timer', mustStop);
   const temp = lastVal;
-  lastVal = undefined;
+  lastVal = -1;
   return temp;
 };
 
-module.exports = {
+export default {
   start,
   stop
-};
+}
+
+interface EndDate {
+  minutes: number,
+  seconds?: number
+}
+
+export type Callback = (val: number, savedValue: number) => void;
+export type CallBackEnd = () => void;
