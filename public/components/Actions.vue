@@ -1,3 +1,6 @@
+import { TimerStatus } from "../store/timer";
+import { TimerStatus } from "../store/timer";
+import { TimerStatus } from "../store/timer";
 <template>
   <div id="actions" @mouseenter="changeShowState(true)" @mouseleave="changeShowState(false)">
     <div v-if="show">
@@ -14,42 +17,45 @@
   </div>
 </template>
 
-<script>
-  import {mapActions, mapState} from "vuex";
-  import timer from '../timer'
+<script lang="ts">
+  import { Component, Prop, Vue } from "vue-property-decorator";
+  import timer, { Callback, CallBackEnd } from "../timer";
 
-  export default {
-    name: "Actions",
-    data() {
-      return {
-        show: false,
-      }
-    },
-    props: {
-      callback: Function,
-      stopCallback: Function
-    },
-    computed: {
-      ...mapState('timer', ['running', 'paused', 'minutes', 'seconds'])
-    },
-    methods: {
-      changeShowState(state) {
-        this.show = state;
-      },
-      ...mapActions('timer', ['changeState']),
-      reset() {
-        this.changeState('stop');
-        console.log('stop', timer.stop());
-      },
-      pause() {
-        timer.stop();
-        this.changeState('pause');
-      },
-      resume() {
-        console.log(this.minutes, this.seconds);
-        this.changeState('start');
-        timer.start({minutes: parseInt(this.minutes), seconds: this.seconds}, this.callback, this.stopCallback)
-      }
+  import { Action, State } from "vuex-class";
+  import { TimerStatus } from "../store/timer";
+
+  @Component({
+    name: "Actions"
+  })
+  export default class Actions extends Vue{
+    show = false;
+
+    @Prop() callback!: Callback;
+    @Prop() stopCallback!: CallBackEnd;
+
+    @State('running', { namespace: 'timer' }) running!: boolean;
+    @State('paused', { namespace: 'timer' }) paused!: boolean;
+    @State('minutes', { namespace: 'timer' }) minutes!: number;
+    @State('seconds', { namespace: 'timer' }) seconds!: number;
+
+    @Action('changeState', { namespace: 'timer' }) changeState!: (status: TimerStatus) => void;
+
+    changeShowState(state: boolean) {
+      this.show = state;
+    }
+
+    reset() {
+      this.changeState(TimerStatus.stop);
+    }
+
+    pause() {
+      timer.stop();
+      this.changeState(TimerStatus.pause);
+    }
+
+    resume() {
+      this.changeState(TimerStatus.start);
+      timer.start({minutes: this.minutes, seconds: this.seconds}, this.callback, this.stopCallback)
     }
   }
 </script>

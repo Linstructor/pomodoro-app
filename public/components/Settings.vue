@@ -11,31 +11,27 @@
   </div>
 </template>
 
-<script>
-  import {mapState, mapActions} from 'vuex';
+<script lang="ts">
+  import { Component, Vue } from "vue-property-decorator";
+  import { Action, State } from "vuex-class";
 
-  export default {
-    name: "settings",
-    computed: mapState('settings', [
-      'alwaysOnTop',
-      'duration',
-      'darkMode',
-      'autoDarkMode'
-    ]),
-    methods: {
-      ...mapActions('settings', [
-        'setDuration',
-        'setAlwaysOntop',
-        'changeDarkModeState',
-        'changeAutoDarkModeState'
-      ]),
-      ...mapActions('timer', [
-        'changeMinutes'
-      ]),
-      ...mapActions('app', [
-        'hideSettings'
-      ]),
-    },
+  @Component({
+    name: "settings"
+  })
+  export default class Settings extends Vue {
+    @Action('setDuration', {namespace: 'settings'}) setDuration!: ((minute: number) => void);
+    @Action('setAlwaysOntop', {namespace: 'settings'}) setAlwaysOntop!: ((minute: number) => void);
+    @Action('changeDarkModeState', {namespace: 'settings'}) changeDarkModeState!: ((minute: number) => void);
+    @Action('changeAutoDarkModeState', {namespace: 'settings'}) changeAutoDarkModeState!: ((minute: number) => void);
+
+    @Action('changeMinutes', {namespace: 'timer'}) changeMinutes!: ((minute: number) => void);
+
+    @Action('hideSettings', {namespace: 'app'}) hideSettings!: ((minute: number) => void);
+
+    @State('alwaysOnTop', {namespace: 'settings'}) alwaysOnTop!: number;
+    @State('duration', {namespace: 'settings'}) duration!: number;
+    @State('darkMode', {namespace: 'settings'}) darkMode!: number;
+    @State('autoDarkMode', {namespace: 'settings'}) autoDarkMode!: number;
   }
 </script>
 

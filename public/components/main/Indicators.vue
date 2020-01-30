@@ -10,17 +10,19 @@
   </div>
 </template>
 
-<script>
-  import {mapState, mapActions} from 'vuex';
+<script lang="ts">
+  import { Vue, Component } from 'vue-property-decorator';
 
-  export default {
-    name: "Indicators",
-    computed: {
-      ...mapState('indicators', ['current', 'total']),
-    },
-    methods: {
-      ...mapActions('indicators', ['set']),
-    }
+  import { Action, State } from "vuex-class";
+
+  @Component({
+    name: "Indicators"
+  })
+  export default class Indicators extends Vue{
+    @State('current', {namespace: 'indicators'}) current!: number;
+    @State('total', {namespace: 'indicators'}) total!: number;
+
+    @Action('set', {namespace: 'indicators'}) set!: (value: number) => void;
   }
 </script>
 

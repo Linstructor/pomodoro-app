@@ -3,7 +3,7 @@ import timer from './timer';
 import indicators from './indicators';
 import app from './app';
 
-module.exports = {
+export default {
   settings,
   timer,
   indicators,
