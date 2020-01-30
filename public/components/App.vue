@@ -14,83 +14,106 @@
 </template>
 
 <script lang="ts">
-  import Indicators from "./main/Indicators.vue";
-  import Settings from "./Settings.vue";
-  import Actions from "./Actions.vue";
-  import timer from "../timer";
+    import Indicators from "./main/Indicators.vue";
+    import Settings from "./Settings.vue";
+    import Actions from "./Actions.vue";
+    import timer from "../timer";
 
-  import { TimerStatus } from "../store/timer";
+    import { TimerStatus } from "../store/timer";
 
-  import { Action, Getter, State } from "vuex-class";
+    import { Action, Getter, State } from "vuex-class";
 
-  import { Component, Vue } from "vue-property-decorator";
+    import { Component, Vue } from "vue-property-decorator";
+    import {ComponentOptions} from "vue";
 
-  @Component({
-    components: {Actions, Settings, Indicators},
-  })
-  export default class App extends Vue {
+    @Component({
+        components: {Actions, Settings, Indicators}
+    })
+    export default class App extends Vue {
+        clickPos = {
+            x: 0,
+            y: 0
+        };
 
-    clickPos = {
-      x: 0,
-      y: 0
-    };
+        ac() {
+            try {
+                this.electron = require('electron')
+            } catch (e) {
+                console.warn('electron has not been initialize')
+            }
+        }
 
-    @Action('changeMinutes', {namespace: 'timer'}) changeMinutes!: ((minute: number) => void);
-    @Action('changeState', {namespace: 'timer'}) changeState!: ((state: TimerStatus) => void);
-    @Action('decount', {namespace: 'timer'}) decount!: ((value: number) => void);
-    @Action('showSettings', {namespace: 'app'}) showSettings!: (() => void);
-    @Action('add', {namespace: 'indicators'}) add!: (() => void);
-    @Action('reset', {namespace: 'indicators'}) reset!: (() => void);
+        @Action('changeMinutes', {namespace: 'timer'}) changeMinutes!: ((minute: number) => void);
+        @Action('changeState', {namespace: 'timer'}) changeState!: ((state: TimerStatus) => void);
+        @Action('decount', {namespace: 'timer'}) decount!: ((value: number) => void);
+        @Action('showSettings', {namespace: 'app'}) showSettings!: (() => void);
+        @Action('add', {namespace: 'indicators'}) add!: (() => void);
+        @Action('reset', {namespace: 'indicators'}) reset!: (() => void);
 
-    @Getter('getMinutes', {namespace: 'timer'}) getMinutes!: () => number;
-    @Getter('getSeconds', {namespace: 'timer'}) getSeconds!: () => number;
+        @Getter('getMinutes', {namespace: 'timer'}) getMinutes!: () => number;
+        @Getter('getSeconds', {namespace: 'timer'}) getSeconds!: () => number;
 
-    @State('isSettingsPageShow', {namespace: 'app'}) isSettingsPageShow!: boolean;
-    @State('running', {namespace: 'timer'}) running!: boolean;
-    @State('minutes', {namespace: 'timer'}) minutes!: number;
+        @State('isSettingsPageShow', {namespace: 'app'}) isSettingsPageShow!: boolean;
+        @State('running', {namespace: 'timer'}) running!: boolean;
+        @State('minutes', {namespace: 'timer'}) minutes!: number;
 
-    @State('current', {namespace: 'indicators'}) current!: number;
-    @State('total', {namespace: 'indicators'}) total!: number;
+        @State('current', {namespace: 'indicators'}) current!: number;
+        @State('total', {namespace: 'indicators'}) total!: number;
 
-    @State('darkMode', {namespace: 'settings'}) darkMode!: boolean;
+        @State('darkMode', {namespace: 'settings'}) darkMode!: boolean;
 
-    updateMinute(event: Event): void {
-      const number: number = (<HTMLInputElement>event.target).valueAsNumber;
-      if (number > 100) {
-        (<HTMLInputElement>event.target).valueAsNumber = 99;
-        return this.changeMinutes(99);
-      }
-      this.changeMinutes(number);
+        electron = require('electron');
+
+        // constructor(options: ComponentOptions<V>) {
+        //     super(options);
+        //     try {
+        //         this.electron = require('electron')
+        //     } catch (e) {
+        //         console.warn('electron has not been initialize')
+        //     }
+        // }
+
+        updateMinute(event: Event): void {
+            const number: number = (<HTMLInputElement>event.target).valueAsNumber;
+            if (number > 100) {
+                (<HTMLInputElement>event.target).valueAsNumber = 99;
+                return this.changeMinutes(99);
+            }
+            this.changeMinutes(number);
+        }
+
+        click(event: MouseEvent): void {
+            this.clickPos.x = event.screenX;
+            this.clickPos.y = event.screenY;
+        }
+
+        start(event: MouseEvent): void {
+            const target = <HTMLElement>event.target;
+            if (target.id !== 'main') return;
+            if (this.clickPos.x !== event.screenX || this.clickPos.y !== event.screenY) return;
+            if (this.current === this.total) this.reset();
+            this.changeState(TimerStatus.start);
+
+            if (Object.keys(this.electron).length > 0) {
+                this.electron.ipcRenderer.send('start')
+            }
+
+            timer.start({minutes: this.minutes}, this.updateTimer, this.handleStop);
+        }
+
+        updateTimer(info: number, previousValue: number): void {
+            //@ts-ignore
+            this.decount(Math.round(Math.abs(new Date(info) - new Date(previousValue)) / 1000));
+        }
+
+        handleStop(): void {
+            this.changeState(TimerStatus.stop);
+            this.add();
+            if (Object.keys(this.electron).length > 0) {
+                this.electron.ipcRenderer.send('end', true, {max: this.total, current: this.current})
+            }
+        }
     }
-
-    click(event: MouseEvent): void {
-      this.clickPos.x = event.screenX;
-      this.clickPos.y = event.screenY;
-    }
-
-    start(event: MouseEvent): void {
-      const target = <HTMLElement>event.target;
-      if (target.id !== 'main') return;
-      if (this.clickPos.x !== event.screenX || this.clickPos.y !== event.screenY) return;
-      if (this.current === this.total) this.reset();
-      console.log('start');
-      this.changeState(TimerStatus.start);
-      require('electron').ipcRenderer.send('start');
-      timer.start({minutes: this.minutes}, this.updateTimer, this.handleStop);
-    }
-
-    updateTimer(info: number, previousValue: number): void {
-      //@ts-ignore
-      this.decount(Math.round(Math.abs(new Date(info) - new Date(previousValue)) / 1000));
-    }
-
-    handleStop(): void {
-      this.changeState(TimerStatus.stop);
-      this.add();
-      require('electron').ipcRenderer.send('end', true, {max: this.total, current: this.current});
-      console.log('finish');
-    }
-  }
 </script>
 
 <style scoped>

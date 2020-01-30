@@ -167,3 +167,11 @@ fabric.properties
 
 public/final
 dist
+
+public/assets/.DS_Store
+
+public/.DS_Store
+
+public/assets/fonts/.DS_Store
+
+.DS_Store

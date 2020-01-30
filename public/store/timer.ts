@@ -51,7 +51,10 @@ const module:  Module<TimerState, any> = {
           state.running = false;
           state.minutes = state.original;
           state.seconds = 0;
-          require('electron').ipcRenderer.send('end');
+          try {
+            const electron = require('electron');
+            if (Object.keys(electron).length > 0) electron.ipcRenderer.send('end');
+          } catch (e) {}
           return;
         }
         case TimerStatus.pause: {

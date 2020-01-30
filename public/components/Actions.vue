@@ -46,7 +46,6 @@ import { TimerStatus } from "../store/timer";
 
     reset() {
       this.changeState(TimerStatus.stop);
-      console.log('stop', timer.stop());
     }
 
     pause() {
@@ -55,7 +54,6 @@ import { TimerStatus } from "../store/timer";
     }
 
     resume() {
-      console.log(this.minutes, this.seconds);
       this.changeState(TimerStatus.start);
       timer.start({minutes: this.minutes, seconds: this.seconds}, this.callback, this.stopCallback)
     }
